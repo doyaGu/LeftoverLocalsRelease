@@ -1,0 +1,94 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/WorkspaceSettings.xcsettings
+DerivedData/
+build/
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+.swiftpm/
+
+# Android/Gradle
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+*.apk
+*.ap_*
+*.cxx/
+
+# C/C++
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.out
+*.a
+*.lib
+*.dylib
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+Makefile
+!*/Makefile
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.venv
+venv/
+ENV/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Misc
+*.swp
+*.swo
+*~
+
+# User-specific
+*.user
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+
+# Others
+*.tmp
+*.bak
+*.orig
+
+# Ignore test output
+/tests/output/
+
+# Ignore PoCLLMAttack/llama.cpp/build.zig cache
+PoCLLMAttack/llama.cpp/zig-cache/
+PoCLLMAttack/llama.cpp/zig-out/
+
+# Ignore VulkanAndroid APKs
+VulkanAndroid/APKs/*.apk
