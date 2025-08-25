@@ -18,20 +18,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
-    ndkVersion '25.1.8937393'
-    
+    namespace 'com.android.covertVKWriter'
+    compileSdk 36
+
     defaultConfig {
         shaders {
             glslcArgs.addAll(['-c'])
         }
         applicationId 'com.android.covertVKWriter'
-        minSdk 30
-        targetSdk 33
+        minSdk 26
+        targetSdk 36
         externalNativeBuild {
             cmake {
                 // Available arguments are inside ${SDK}/cmake/.../android.toolchain.cmake file
-                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DANDROID_STL=c++_shared",
+                          "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
             }
         }
     }
@@ -42,21 +43,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions { jvmTarget = '11' }
+    buildFeatures {
+        prefab true
+    }
     externalNativeBuild {
         cmake {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    buildFeatures {
-        prefab true
-    }
-    
-    namespace 'com.android.covertVKWriter'
 }
 
 dependencies {
-    implementation 'androidx.core:core:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'androidx.games:games-activity:1.2.2-alpha01'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.games:games-activity:4.0.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
 
