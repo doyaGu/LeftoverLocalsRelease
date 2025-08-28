@@ -16,16 +16,13 @@
 
 package com.android.covertVKListener
 
-import android.R.*
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.AssetManager
 
 class CovertVKListener : AppCompatActivity() {
-
     val histogram = mutableMapOf<Int, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +34,10 @@ class CovertVKListener : AppCompatActivity() {
         val canaryEditText = findViewById<TextView>(R.id.editTextCanaryValue)
 
         dumpMemoryButton.setOnClickListener {
-
-            var to_print = ""
+            var toPrint = ""
             val assetManager = this.assets;
 
-            val gridSize: Int = 32;
+            val gridSize = 32;
             val size: Int = 4096 * gridSize
 
             val iters: Int = itersEditText.text.toString().toInt();
@@ -49,7 +45,7 @@ class CovertVKListener : AppCompatActivity() {
             var canaryObservations = 0
 
             histogram.clear();
-            for (z in 0 .. iters-1) {
+            for (z in 0..iters - 1) {
                 val k = this.entry(assetManager);
 
                 for (i in 0..size - 1) {
@@ -61,27 +57,26 @@ class CovertVKListener : AppCompatActivity() {
             }
 
             // From ChatGPT :)
-            val sortedHistogram = histogram.toList().sortedByDescending { (_, frequency) -> frequency }
+            val sortedHistogram =
+                histogram.toList().sortedByDescending { (_, frequency) -> frequency }
 
-            var count: Int = 0;
+            var count = 0;
             for ((value, frequency) in sortedHistogram) {
                 if (count > 10) {
                     break;
                 }
-                to_print += "($value, $frequency)\n"
+                toPrint += "($value, $frequency)\n"
                 count += 1;
             }
 
-            to_print = "How many times observed canary value ($canary): $canaryObservations\n---\n" +
-                        "Histogram of top 10 observed values:\n---\n" + to_print
-            memoryDumpOutput.setText(to_print)
+            toPrint =
+                "How many times observed canary value ($canary): $canaryObservations\n---\n" +
+                        "Histogram of top 10 observed values:\n---\n" + toPrint
+            memoryDumpOutput.text = toPrint
         }
-
-
-
     }
 
-   external fun entry(assetManager : AssetManager): IntArray
+    external fun entry(assetManager: AssetManager): IntArray
 
     companion object {
         init {

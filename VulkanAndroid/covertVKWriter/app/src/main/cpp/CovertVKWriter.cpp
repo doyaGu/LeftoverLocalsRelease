@@ -30,15 +30,13 @@
 #define SHARED_MEMORY_SIZE_TRAVERSED (SHARED_MEMORY_SIZE)
 #endif
 
-std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path,
-                                             AAssetManager *assetManager) {
+std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path, AAssetManager *assetManager) {
     std::vector<uint32_t> file_content;
     assert(assetManager);
-    AAsset *file =
-            AAssetManager_open(assetManager, file_path, AASSET_MODE_BUFFER);
+    AAsset *file = AAssetManager_open(assetManager, file_path, AASSET_MODE_BUFFER);
     size_t file_length = AAsset_getLength(file);
 
-    file_content.resize((file_length+3)/4);
+    file_content.resize((file_length + 3) / 4);
 
     AAsset_read(file, file_content.data(), file_length);
     AAsset_close(file);
@@ -48,10 +46,10 @@ std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path,
 //extern "C" JNIEXPORT jstring JNICALL
 extern "C" JNIEXPORT jintArray JNICALL
 Java_com_android_covertVKWriter_CovertVKWriter_entry(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject obj,
         jobject assetManager,
-        jint jCanary ) {
+        jint jCanary) {
 
     int gridSize = 8;
     int workGroupSize = 32;
@@ -70,7 +68,6 @@ Java_com_android_covertVKWriter_CovertVKWriter_entry(
     // Get list of available physical devices.
     auto physicalDevices = instance.physicalDevices();
 
-
     // Create device from first physical device.
     auto device = easyvk::Device(instance, physicalDevices.at(0));
 
@@ -79,20 +76,18 @@ Java_com_android_covertVKWriter_CovertVKWriter_entry(
     auto c = easyvk::Buffer(device, size);
     auto canary = easyvk::Buffer(device, 1);
 
-    long iterations = 0;
-
     for (int i = 0; i < size; i++) {
         a.store(i, 0);
         b.store(i, 0);
         c.store(i, 0);
     }
 
-    canary.store(0,static_cast<uint>(jCanary));
+    canary.store(0, static_cast<uint>(jCanary));
 
     //for (int i = 0; i < 1024; i++) {
-    std::vector<easyvk::Buffer> bufs = {a, b, c, canary};
+    std::vector<easyvk::Buffer> buffers = {a, b, c, canary};
 
-    auto program = easyvk::Program(device, spvCode, bufs);
+    auto program = easyvk::Program(device, spvCode, buffers);
 
     // Dispatch 4 work groups of size 1 to carry out the work.
     program.setWorkgroups(gridSize);
@@ -102,7 +97,7 @@ Java_com_android_covertVKWriter_CovertVKWriter_entry(
     program.initialize("covertWriter");
     program.run();
 
-    jint *elements = env->GetIntArrayElements(resultArray, nullptr);
+    env->GetIntArrayElements(resultArray, nullptr);
 
     program.teardown();
 

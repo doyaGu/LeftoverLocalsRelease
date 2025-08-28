@@ -17,16 +17,13 @@
 package com.android.covertVKWriter
 
 import android.content.res.AssetManager
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.EditText
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 
 class CovertVKWriter : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main);
@@ -36,11 +33,10 @@ class CovertVKWriter : AppCompatActivity() {
         val canaryEditText = findViewById<TextView>(R.id.editTextCanaryValue)
 
         writeMemoryButton.setOnClickListener {
-
             val assetManager = this.assets;
             val handler = Handler()
 
-            statusTextView.setText("Starting to write")
+            statusTextView.text = "Starting to write"
 
             handler.post {
                 writeMemoryButton.isEnabled = false
@@ -51,14 +47,15 @@ class CovertVKWriter : AppCompatActivity() {
                     val k = this.entry(assetManager, canary);
                 }
 
-                statusTextView.setText("Done Writing")
+                statusTextView.text = "Done Writing"
                 writeMemoryButton.isEnabled = true
             }
         }
     }
 
     // external fun entry(): IntArray
-   external fun entry(assetManager : AssetManager, canary: Int): IntArray
+    external fun entry(assetManager: AssetManager, canary: Int): IntArray
+
     companion object {
         init {
             System.loadLibrary("vkwriter")

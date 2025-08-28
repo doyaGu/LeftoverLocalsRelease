@@ -29,17 +29,16 @@
 #if !defined(SHARED_MEMORY_SIZE_TRAVERSED)
 #define SHARED_MEMORY_SIZE_TRAVERSED (SHARED_MEMORY_SIZE)
 #endif
+
 #include <assert.h>
 
-std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path,
-                                            AAssetManager *assetManager) {
+std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path, AAssetManager *assetManager) {
     std::vector<uint32_t> file_content;
     assert(assetManager);
-    AAsset *file =
-            AAssetManager_open(assetManager, file_path, AASSET_MODE_BUFFER);
+    AAsset *file = AAssetManager_open(assetManager, file_path, AASSET_MODE_BUFFER);
     size_t file_length = AAsset_getLength(file);
 
-    file_content.resize((file_length+3)/4);
+    file_content.resize((file_length + 3) / 4);
 
     AAsset_read(file, file_content.data(), file_length);
     AAsset_close(file);
@@ -48,7 +47,7 @@ std::vector<uint32_t> LoadBinaryFileToVector(const char *file_path,
 
 extern "C" JNIEXPORT jintArray JNICALL
 Java_com_android_covertVKListener_CovertVKListener_entry(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject obj,
         jobject assetManager) {
 
@@ -85,9 +84,9 @@ Java_com_android_covertVKListener_CovertVKListener_entry(
         c.store(i, i);
     }
 
-    std::vector<easyvk::Buffer> bufs = {a, b, c, canary};
+    std::vector<easyvk::Buffer> buffers = {a, b, c, canary};
 
-    auto program = easyvk::Program(device, spvCode, bufs);
+    auto program = easyvk::Program(device, spvCode, buffers);
 
     // Dispatch 4 work groups of size 1 to carry out the work.
     program.setWorkgroups(gridSize);
@@ -101,7 +100,7 @@ Java_com_android_covertVKListener_CovertVKListener_entry(
     jint *elements = env->GetIntArrayElements(resultArray, nullptr);
 
     //int nonZeros = 0;
-    for(int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         unsigned v = c.load(i);
         elements[i] = v;
     }
